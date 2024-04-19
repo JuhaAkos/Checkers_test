@@ -17,22 +17,36 @@ const tileIDs =
 "82", "84", "86", "88",
 ];
 
+function chekForQueens(){
+    let queenFound = false;
+    for (let i=0; i<4;i++){
+        if (document.getElementById(tileIDs[i]).src.endsWith("/Btile.png") ||
+        document.getElementById(tileIDs[i]).src.endsWith("/Bselect.png") ) {
+            document.getElementById(tileIDs[i]).src="imageref/BQtile.png";
+            queenFound = true;
+        }
+    }
+    for (let i=28; i<32;i++){
+        if (document.getElementById(tileIDs[i]).src.endsWith("/Wtile.png") ||
+        document.getElementById(tileIDs[i]).src.endsWith("/Wselect.png") ) {
+            document.getElementById(tileIDs[i]).src="imageref/WQtile.png";
+            queenFound = true;
+        }
+    }
+    return queenFound;
+}
+
+function checkForWinner(){
+    
+}
+
 function press(a) { 
-    console.log("Turn:")
-    //showMandatoryHit(); 
+    console.log("\nTurn:")
       
     selectTile(a);    
     
-    
-    //mandatoryHit = false;
-    refreshDisplayData();     
-    //plus check for queen     
-    showMandatoryHit();   
-    if (mandatoryHit){
-        console.log("This turn has mandatory!");
-    } else {
-        console.log("This turn has NO mandatory!");
-    }   
+    refreshDisplayData();        
+    callShowMandatoryHit()
 }
 
 function selectTile(a){    
@@ -44,14 +58,18 @@ function selectTile(a){
 
     //if clicked on occupied tile
     if (matchTileAndPlayer(a) && !mandatoryHit){
+        //todo for queens
         deselectActiveTile(activeTile);
         selectActiveTile(a);
-        showDestination();
+        //ÚJJJJJJJJJJJJJ
+        callDestinationDetection()
     }
 
     //jump to empty possible tile
     if (document.getElementById(a).src.endsWith("/bred.png")) {        
         hopOver(a);
+        //ÚJJJJJJJ
+        chekForQueens()
         switchTurn();
     }
 
@@ -61,14 +79,16 @@ function selectTile(a){
         grayToRed();
         changeMandatoryBack();
         selectActiveTile(a);
-        showPossibleMandatory();       
+        //ÚJJJJ
+        callMandatoryDetection();    
     }
 
     //jump over other tile
     if (document.getElementById(a).src.endsWith("/rred.png") && activeTile!="none") {
         hitTile(a);
-        showMandatoryHit();
-        if (!mandatoryHit) {
+        callShowMandatoryHit()
+        //ÚJJJJJJJJ
+        if (chekForQueens() || !mandatoryHit) {
             switchTurn();
         }
     }
@@ -83,12 +103,20 @@ function grayToRed(){
     }
 }
 
-function showPossibleMandatory(){    
-    var upOrDown = 1
-    if (!whiteplayerturn) {
-        upOrDown = -1;
+function callMandatoryDetection(){
+    if (document.getElementById(activeTile).src.endsWith("WQselect.png") || document.getElementById(activeTile).src.endsWith("BQselect.png")) {
+        console.log("QUEEN - MANDA");
+        showPossibleMandatory(-1)
+        showPossibleMandatory(1)
+    } else if (document.getElementById(activeTile).src.endsWith("Wselect.png")) {
+        showPossibleMandatory(1)
     }
+    else if (document.getElementById(activeTile).src.endsWith("Bselect.png")) {
+        showPossibleMandatory(-1)
+    }
+}
 
+function showPossibleMandatory(upOrDown){    
     var jumpLeft = (Number(activeTile[0])+upOrDown*2).toString() + ((Number(activeTile[1])-2).toString());
     var jumpRight = (Number(activeTile[0])+upOrDown*2).toString() + ((Number(activeTile[1])+2).toString());
 
@@ -113,42 +141,44 @@ function changeMandatoryBack(){
     }
 }
 
+function showMandatoryHit(tileID, upOrDown){
+    leftNeighbour = (Number(tileID[0])+upOrDown).toString() + ((Number(tileID[1])-1).toString());
+    rightNeighbour = (Number(tileID[0])+upOrDown).toString() + ((Number(tileID[1])+1).toString());
+    jumpLeft = (Number(tileID[0])+upOrDown*2).toString() + ((Number(tileID[1])-2).toString());
+    jumpRight = (Number(tileID[0])+upOrDown*2).toString() + ((Number(tileID[1])+2).toString());           
 
-function showMandatoryHit(){
-    mandatoryHit = false
-    var upOrDown = 1
-    if (!whiteplayerturn) {
-        upOrDown = -1;
+    if (leftNeighbour[1] > 1 && leftNeighbour[0] > 1 && leftNeighbour[0] < 8 && isOccupiedByOpponent(leftNeighbour)) {                
+        if (!isOccupiedByOpponent(jumpLeft) && !isOccupiedByFriend(jumpLeft)) {
+            document.getElementById((jumpLeft)).src="imageref/rred.png";
+            selectActiveMandatoryTile(tileID);
+            mandatoryHit = true;
+        }
     }
+    if (rightNeighbour[1] < 8 && rightNeighbour[0] > 1 && rightNeighbour[0] < 8 && isOccupiedByOpponent(rightNeighbour)) {
+        if (!isOccupiedByOpponent(jumpRight) && !isOccupiedByFriend(jumpRight)) {                    
+            document.getElementById((jumpRight)).src="imageref/rred.png";
+            selectActiveMandatoryTile(tileID);
+            mandatoryHit = true;
+        }
+    }
+}
 
-    leftNeighbour = 0;
-    rightneigbour = 0;
-    jumpLeft = 0;
-    jumpRight = 0;
 
+function callShowMandatoryHit(){
+    mandatoryHit = false;
     for (let i = 0; i < tileIDs.length; i++) { 
-        if (matchTileAndPlayer(tileIDs[i])) {
-            leftNeighbour = (Number(tileIDs[i][0])+upOrDown).toString() + ((Number(tileIDs[i][1])-1).toString());
-            rightNeighbour = (Number(tileIDs[i][0])+upOrDown).toString() + ((Number(tileIDs[i][1])+1).toString());
-            jumpLeft = (Number(tileIDs[i][0])+upOrDown*2).toString() + ((Number(tileIDs[i][1])-2).toString());
-            jumpRight = (Number(tileIDs[i][0])+upOrDown*2).toString() + ((Number(tileIDs[i][1])+2).toString());
-
-            //console.log("Coords: " + leftNeighbour + " + " + rightNeighbour + " + " + jumpLeft + " + " + jumpRight);
-
-            if (leftNeighbour[1] > 1 && leftNeighbour[0] > 1 && leftNeighbour[0] < 8 && isOccupiedByOpponent(leftNeighbour)) {                
-                if (!isOccupiedByOpponent(jumpLeft) && !isOccupiedByFriend(jumpLeft)) {
-                    document.getElementById((jumpLeft)).src="imageref/rred.png";
-                    selectActiveMandatoryTile(tileIDs[i]);
-                    mandatoryHit = true;
-                }
-            }
-            if (rightNeighbour[1] < 8 && rightNeighbour[0] > 1 && rightNeighbour[0] < 8 && isOccupiedByOpponent(rightNeighbour)) {
-                if (!isOccupiedByOpponent(jumpRight) && !isOccupiedByFriend(jumpRight)) {                    
-                    document.getElementById((jumpRight)).src="imageref/rred.png";
-                    selectActiveMandatoryTile(tileIDs[i]);
-                    mandatoryHit = true;
-                }
-            }
+        if (matchTileAndPlayer(tileIDs[i]) 
+        && (document.getElementById(tileIDs[i]).src.endsWith("Wselect.png") || document.getElementById(tileIDs[i]).src.endsWith("Wtile.png"))) {
+            showMandatoryHit(tileIDs[i], 1)
+        }
+        else if (matchTileAndPlayer(tileIDs[i]) 
+        && (document.getElementById(tileIDs[i]).src.endsWith("Bselect.png") || document.getElementById(tileIDs[i]).src.endsWith("Btile.png"))) {
+            showMandatoryHit(tileIDs[i], -1)
+        } else if (matchTileAndPlayer(tileIDs[i]) 
+        && (document.getElementById(tileIDs[i]).src.endsWith("BQselect.png") || document.getElementById(tileIDs[i]).src.endsWith("BQtile.png")
+        || document.getElementById(tileIDs[i]).src.endsWith("WQselect.png") || document.getElementById(tileIDs[i]).src.endsWith("WQtile.png"))) {
+            showMandatoryHit(tileIDs[i], 1)
+            showMandatoryHit(tileIDs[i], -1)
         }
     }
 }
@@ -177,23 +207,30 @@ function hopOver(destTile) {
     activeTile = "none";
 }
 
-function showDestination(){
-    var upOrDown = 1
-    if (!whiteplayerturn) {
-        upOrDown = -1;
+function callDestinationDetection(){
+    if (document.getElementById(activeTile).src.endsWith("WQselect.png") || document.getElementById(activeTile).src.endsWith("BQselect.png")) {
+        console.log("QUEEN");
+        showDestination(-1)
+        showDestination(1)
+    } else if (document.getElementById(activeTile).src.endsWith("Wselect.png")) {
+        showDestination(1)
     }
+    else if (document.getElementById(activeTile).src.endsWith("Bselect.png")) {
+        showDestination(-1)
+    }
+}
 
-    if (document.getElementById(activeTile).src.endsWith("Wselect.png") || document.getElementById(activeTile).src.endsWith("Bselect.png")) {
-        firstID = (Number(activeTile[0])+upOrDown).toString() + ((Number(activeTile[1])-1).toString());
-        secondID = (Number(activeTile[0])+upOrDown).toString() + ((Number(activeTile[1])+1).toString());
-    }    
-
-    if (activeTile[1] > 1) {
+//ÚJJJJJJJ
+function showDestination(upOrDown){
+    if ((Number(activeTile[0])+upOrDown)>0 && (Number(activeTile[0])+upOrDown)<8 && Number(activeTile[1]) > 1) {
+        firstID = (Number(activeTile[0])+upOrDown).toString() + ((Number(activeTile[1])-1).toString()); 
         if (document.getElementById(firstID).src.endsWith("/red.png")) {
             document.getElementById((firstID)).src="imageref/bred.png";
-        }
+        }         
     }
-    if (activeTile[1] < 8){
+
+    if ((Number(activeTile[0])+upOrDown)>0 && (Number(activeTile[0])+upOrDown)<8 && Number(activeTile[1]) < 8) { 
+        secondID = (Number(activeTile[0])+upOrDown).toString() + ((Number(activeTile[1])+1).toString());  
         if (document.getElementById(secondID).src.endsWith("/red.png")){
             document.getElementById((secondID)).src="imageref/bred.png";
         }
@@ -237,10 +274,13 @@ function refreshDisplayData() {
     }
 }
 
+//ÚJJJJJJ
 function matchTileAndPlayer(a){
-    if ((document.getElementById(a).src.endsWith("Wtile.png") || document.getElementById(a).src.endsWith("WQtile.png")) && whiteplayerturn){
+    if ((document.getElementById(a).src.endsWith("Wtile.png") || document.getElementById(a).src.endsWith("WQtile.png")
+        || document.getElementById(a).src.endsWith("WQselect.png") || document.getElementById(a).src.endsWith("Wselect.png")) && whiteplayerturn){
         return true;
-    } else if ((document.getElementById(a).src.endsWith("Btile.png") || document.getElementById(a).src.endsWith("BQtile.png")) && !whiteplayerturn){
+    } else if ((document.getElementById(a).src.endsWith("Btile.png") || document.getElementById(a).src.endsWith("BQtile.png")
+    || document.getElementById(a).src.endsWith("BQselect.png") || document.getElementById(a).src.endsWith("Bselect.png")) && !whiteplayerturn){
         return true;
     }
     return false;
