@@ -148,14 +148,14 @@ function showMandatoryHit(tileID, upOrDown){
     jumpRight = (Number(tileID[0])+upOrDown*2).toString() + ((Number(tileID[1])+2).toString());           
 
     if (leftNeighbour[1] > 1 && leftNeighbour[0] > 1 && leftNeighbour[0] < 8 && isOccupiedByOpponent(leftNeighbour)) {                
-        if (!isOccupiedByOpponent(jumpLeft) && !isOccupiedByFriend(jumpLeft)) {
+        if (document.getElementById(jumpLeft).src.endsWith("red.png") || document.getElementById(jumpLeft).src.endsWith("bred.png") || document.getElementById(jumpLeft).src.endsWith("rred.png")) {
             document.getElementById((jumpLeft)).src="imageref/rred.png";
             selectActiveMandatoryTile(tileID);
             mandatoryHit = true;
         }
     }
     if (rightNeighbour[1] < 8 && rightNeighbour[0] > 1 && rightNeighbour[0] < 8 && isOccupiedByOpponent(rightNeighbour)) {
-        if (!isOccupiedByOpponent(jumpRight) && !isOccupiedByFriend(jumpRight)) {                    
+        if (document.getElementById(jumpRight).src.endsWith("red.png") || document.getElementById(jumpRight).src.endsWith("bred.png") || document.getElementById(jumpRight).src.endsWith("rred.png")) {                    
             document.getElementById((jumpRight)).src="imageref/rred.png";
             selectActiveMandatoryTile(tileID);
             mandatoryHit = true;
@@ -222,14 +222,14 @@ function callDestinationDetection(){
 
 //ÚJJJJJJJ
 function showDestination(upOrDown){
-    if ((Number(activeTile[0])+upOrDown)>0 && (Number(activeTile[0])+upOrDown)<8 && Number(activeTile[1]) > 1) {
+    if ((Number(activeTile[0])+upOrDown)>0 && (Number(activeTile[0])+upOrDown)<9 && Number(activeTile[1]) > 1) {
         firstID = (Number(activeTile[0])+upOrDown).toString() + ((Number(activeTile[1])-1).toString()); 
         if (document.getElementById(firstID).src.endsWith("/red.png")) {
             document.getElementById((firstID)).src="imageref/bred.png";
         }         
     }
 
-    if ((Number(activeTile[0])+upOrDown)>0 && (Number(activeTile[0])+upOrDown)<8 && Number(activeTile[1]) < 8) { 
+    if ((Number(activeTile[0])+upOrDown)>0 && (Number(activeTile[0])+upOrDown)<9 && Number(activeTile[1]) < 8) { 
         secondID = (Number(activeTile[0])+upOrDown).toString() + ((Number(activeTile[1])+1).toString());  
         if (document.getElementById(secondID).src.endsWith("/red.png")){
             document.getElementById((secondID)).src="imageref/bred.png";
