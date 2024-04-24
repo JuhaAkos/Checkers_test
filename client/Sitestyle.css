@@ -1,0 +1,220 @@
+body {
+    background-color: #F5EECD;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    max-height: 100% !important;
+  }
+
+.tile {
+    padding: 0;
+    border: none;
+    background: none;    
+}  
+
+.damatable {
+  table-layout: fixed !important;
+  width: 100%;
+    display:block;
+    border-spacing:0;
+    border-collapse:collapse;
+    padding: 0;
+    margin: 0;
+    border: 4px solid black;;
+
+}
+
+.damatable td {
+    padding: 0;
+    border: 1px solid black;
+    margin: 0;
+    vertical-align: middle;  
+}
+
+img {
+    display:inline-block;
+    vertical-align: middle;
+    max-height:100%; 
+    max-width:100%;
+} 
+
+.displaydata {
+    font-size: 120%;
+    line-height: 0;
+}
+
+.leftside {
+  float: left;
+  width: 44%;
+  
+}
+
+.rightside {
+  float: left;
+  padding-left: 20%;
+  padding-top: 2%;
+}
+
+.container {
+  margin-left: 5%;
+}
+
+
+.displaytable {
+  background-color: rgb(64, 35, 35);
+  table-layout: fixed;
+  width: 100%;
+  border-spacing: 5px;
+} 
+
+.displaytable td {
+  background-color: rgb(201, 154, 143);
+  width: 100%;
+  padding-left: 4%;
+  padding-top: 0;
+  padding-bottom: 0;
+
+  border-spacing:0;
+    border-collapse:collapse;
+    margin: 0;
+    border: 0;
+} 
+
+.maintitle {
+  text-align: center;
+  line-height: 0;
+}
+
+/* CHAT CSS */
+
+.name-chat {
+  display: flex;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 700;
+  padding: 8px 16px;
+  color: #402223;
+  background-color: rgb(201, 154, 143);
+
+  border: 1px solid;
+  border-color: #402223;
+}
+
+.body-chat {
+  margin-top: 1%;
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+  align-items: center;
+  display: grid;
+  place-items: center;
+  
+}
+
+.main-chat {
+  border: 8px solid #402223;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+
+.message-container {
+  margin:0;
+  display: flex;
+  flex-direction: column;
+  background-color: #fdfaea;
+  width: 450px;
+  height: 650px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.message-left,
+.message-right {
+  list-style: none;
+  padding: 0px 12px;
+  margin: 12px;
+  max-width: 250px;
+  font-size: 18px;
+  word-wrap: break-word;
+}
+
+.message-left {
+  border-radius: 20px 20px 20px 0px;
+  align-self: flex-start;
+  background-color: #F5EECD;
+  box-shadow: -2px 2px 4px #402223;
+}
+
+.message-right {
+  border-radius: 20px 20px 0px 20px;
+  align-self: flex-end;
+  background-color: #402223;
+  box-shadow: 2px 2px 4px #402223;
+  color: #F5EECD;
+}
+
+
+.message-form {
+  display: flex;
+  justify-content: space-between;
+  width: 490px;
+}
+
+.message-input {
+  flex-grow: 1;
+  height: 48px;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  padding: 0 12px;
+  background-color: rgb(219, 176, 168);
+}
+
+.send-button {
+  height: 48px;
+  font-size: 16px;
+  color: white;
+  background-color: #402223;
+  cursor: pointer;
+  outline: 0;
+}
+
+/*választó panel*/
+
+.tabla-korul {
+  position: relative;
+  display: inline-block;
+  
+  background-color: red;
+}
+
+.chooseSide, .waitSide {  
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.damatable{
+  position: relative;
+  display: flex;
+  justify-content: center;
+
+}
+
+.color-selection button {
+  margin: 5px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
